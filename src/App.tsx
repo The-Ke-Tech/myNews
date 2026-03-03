@@ -1,25 +1,45 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import News from './components/News'; // World/International
+import KenyanNews from './components/KenyanNews'; // New Kenyan page
+
+function Home() {
+  return (
+    <div style={{ textAlign: 'center', padding: '2rem', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
+      <h1 style={{ color: '#007bff' }}>Welcome to Your News App</h1>
+      <p>Choose a section from the menu above.</p>
+    </div>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <nav style={{
+        padding: '1rem',
+        backgroundColor: '#007bff', // Blue for vibrancy
+        color: 'white',
+        display: 'flex',
+        justifyContent: 'space-around',
+        flexWrap: 'wrap', // Responsive for mobile
+        gap: '1rem',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      }}>
+        <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Home</Link>
+        <Link to="/world" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>World News</Link>
+        <Link to="/kenya" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Kenyan News</Link>
+        <Link to="/about" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>About</Link>
+      </nav>
+
+      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}> {/* Centered content */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/world" element={<News />} />
+          <Route path="/kenya" element={<KenyanNews />} />
+          <Route path="/about" element={<h2 style={{ color: '#28a745' }}>About this news app: Built with React for latest headlines!</h2>} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
