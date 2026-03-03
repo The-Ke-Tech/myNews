@@ -80,6 +80,7 @@ const News: React.FC = () => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchNews();
   }, []);
@@ -122,7 +123,6 @@ const News: React.FC = () => {
     if (transContainer) {
       transContainer.innerText = textToTranslate;
       // Google Translate auto-detects and translates visible text in the page
-      // For better control, you can use postMessage or observe, but this works for simple cases
       alert('Translation loaded! Scroll or click the language dropdown if needed. (Google widget)');
     }
   };
@@ -132,7 +132,9 @@ const News: React.FC = () => {
 
   return (
     <div style={{ maxWidth: '100%', padding: '1rem' }}>
-      <h2 style={{ color: '#007bff', textAlign: 'center', marginBottom: '1rem' }}>Latest International Headlines (BBC, Al Jazeera, CNN, etc.)</h2>
+      <h2 style={{ color: '#007bff', textAlign: 'center', marginBottom: '1rem' }}>
+        Latest International Headlines (BBC, Al Jazeera, CNN, etc.)
+      </h2>
       <button
         onClick={handleRefresh}
         style={{
@@ -149,11 +151,13 @@ const News: React.FC = () => {
         Refresh for New World News
       </button>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '1.5rem',
-      }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '1.5rem',
+        }}
+      >
         {internationalArticles.map((article, index) => {
           const cardId = `card-${index}`;
           const likelyChinese = isLikelyChinese(article.title) || isLikelyChinese(article.description);
@@ -171,11 +175,18 @@ const News: React.FC = () => {
               }}
             >
               <h3 style={{ marginBottom: '0.5rem' }}>
-                <a href={article.url} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'none' }}>
+                <a
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#007bff', textDecoration: 'none' }}
+                >
                   {article.title}
                 </a>
               </h3>
-              <p style={{ color: '#555', marginBottom: '0.5rem' }}>{article.description || 'No description available.'}</p>
+              <p style={{ color: '#555', marginBottom: '0.5rem' }}>
+                {article.description || 'No description available.'}
+              </p>
               <small style={{ color: '#888' }}>
                 {article.source} • {new Date(article.published_at).toLocaleString()}
               </small>
@@ -210,8 +221,17 @@ const News: React.FC = () => {
         })}
       </div>
 
-      {internationalArticles.length === 0 && <p style={{ textAlign: 'center', color: '#666' }}>No headlines available right now.</p>}
-      <p style={{ fontSize: '0.9rem', color: '#666', textAlign: 'center', marginTop: '1rem' }}>
+      {internationalArticles.length === 0 && (
+        <p style={{ textAlign: 'center', color: '#666' }}>No headlines available right now.</p>
+      )}
+      <p
+        style={{
+          fontSize: '0.9rem',
+          color: '#666',
+          textAlign: 'center',
+          marginTop: '1rem',
+        }}
+      >
         Auto-hides Chinese articles • Click "Translate" for any remaining non-English.
       </p>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import News from './components/News'; // World/International
 import KenyanNews from './components/KenyanNews'; // New Kenyan page
+import About from './pages/About';
 
 function Home() {
   return (
@@ -33,11 +34,11 @@ function App() {
 
       <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}> {/* Centered content */}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/world" element={<News />} />
-          <Route path="/kenya" element={<KenyanNews />} />
-          <Route path="/about" element={<h2 style={{ color: '#28a745' }}>About this news app: Built with React for latest headlines!</h2>} />
-        </Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/world" element={<News />} />
+  <Route path="/kenya" element={<KenyanNews />} />
+  <Route path="/about" element={<About />} />
+</Routes>
       </div>
     </Router>
   );
