@@ -87,65 +87,41 @@ const News: React.FC = () => {
 
   const handleRefresh = () => fetchNews(true);
 
-  // Function to translate a single article's text using Google Translate widget
-  const translateArticle = (article: Article, cardId: string) => {
-    const card = document.getElementById(cardId);
-    if (!card) return;
-
-    // Prevent multiple loads
-    if (card.querySelector('.google-translate-widget')) return;
-
-    // Load Google Translate script if not loaded
-    if (!document.getElementById('google-translate-script')) {
-      const script = document.createElement('script');
-      script.id = 'google-translate-script';
-      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-      document.body.appendChild(script);
-
-      (window as any).googleTranslateElementInit = () => {
-        // eslint-disable-next-line no-new
-        new (window as any).google.translate.TranslateElement(
-          { pageLanguage: 'auto', includedLanguages: 'en,zh-CN,zh-TW', layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE },
-          'google_translate_element_global' // Hidden global element
-        );
-      };
-    }
-
-    // Create a div for this card's translation
-    const transDiv = document.createElement('div');
-    transDiv.className = 'google-translate-widget';
-    transDiv.innerHTML = `<div id="trans-${cardId}"></div>`;
-    card.appendChild(transDiv);
-
-    // Trigger translation on the text (simulate by setting text and translating)
-    const textToTranslate = `${article.title}\n\n${article.description}`;
-    const transContainer = document.getElementById(`trans-${cardId}`);
-    if (transContainer) {
-      transContainer.innerText = textToTranslate;
-      // Google Translate auto-detects and translates visible text in the page
-      alert('Translation loaded! Scroll or click the language dropdown if needed. (Google widget)');
-    }
+  // Translation: Open Google Translate in new tab → to English
+  const translateArticle = (article: Article) => {
+    const text = `${article.title}\n\n${article.description || 'No description available.'}`;
+    
+    const encodedText = encodeURIComponent(text);
+    const translateUrl = `https://translate.google.com/?sl=auto&tl=en&text=${encodedText}&op=translate`;
+    
+    window.open(translateUrl, '_blank', 'noopener,noreferrer');
   };
 
-  if (loading) return <p style={{ textAlign: 'center', color: '#007bff' }}>Loading international headlines...</p>;
-  if (error) return <p style={{ color: 'red', textAlign: 'center' }}>Error: {error}</p>;
+  if (loading) return <p style={{ textAlign: 'center', color: '#007bff', fontSize: '1.3rem', padding: '3rem 1rem' }}>Loading international headlines...</p>;
+  if (error) return <p style={{ color: 'red', textAlign: 'center', fontWeight: 'bold', padding: '3rem 1rem' }}>Error: {error}</p>;
 
   return (
-    <div style={{ maxWidth: '100%', padding: '1rem' }}>
-      <h2 style={{ color: '#007bff', textAlign: 'center', marginBottom: '1rem' }}>
+    <div style={{ maxWidth: '100%', padding: '1rem', minHeight: '80vh' }}>
+      <h2 style={{ color: '#007bff', textAlign: 'center', marginBottom: '1.5rem', fontSize: '1.8rem' }}>
         Latest International Headlines (BBC, Al Jazeera, CNN, etc.)
       </h2>
+
       <button
         onClick={handleRefresh}
         style={{
           display: 'block',
-          margin: '0 auto 1.5rem',
-          padding: '0.5rem 1rem',
+          margin: '0 auto 2rem auto',
+          padding: '0.8rem 1.8rem',
           backgroundColor: '#007bff',
           color: 'white',
           border: 'none',
-          borderRadius: '4px',
+          borderRadius: '8px',
           cursor: 'pointer',
+          fontSize: '1.1rem',
+          fontWeight: 'bold',
+          boxShadow: '0 3px 6px rgba(0,0,0,0.15)',
+          width: '100%',
+          maxWidth: '320px',
         }}
       >
         Refresh for New World News
@@ -154,27 +130,26 @@ const News: React.FC = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '1.5rem',
         }}
       >
         {internationalArticles.map((article, index) => {
           const cardId = `card-${index}`;
-          const likelyChinese = isLikelyChinese(article.title) || isLikelyChinese(article.description);
 
           return (
             <div
               key={index}
               id={cardId}
               style={{
-                padding: '1rem',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                backgroundColor: '#fff',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                padding: '1.2rem',
+                border: '1px solid #e0e0e0',
+                borderRadius: '10px',
+                backgroundColor: '#ffffff',
+                boxShadow: '0 3px 8px rgba(0,0,0,0.08)',
               }}
             >
-              <h3 style={{ marginBottom: '0.5rem' }}>
+              <h3 style={{ margin: '0 0 0.6rem 0', fontSize: '1.25rem', lineHeight: '1.4' }}>
                 <a
                   href={article.url}
                   target="_blank"
@@ -184,59 +159,68 @@ const News: React.FC = () => {
                   {article.title}
                 </a>
               </h3>
-              <p style={{ color: '#555', marginBottom: '0.5rem' }}>
+
+              <p style={{ color: '#444', margin: '0 0 0.8rem 0', lineHeight: '1.5', fontSize: '0.95rem' }}>
                 {article.description || 'No description available.'}
               </p>
-              <small style={{ color: '#888' }}>
+
+              <small style={{ color: '#666', display: 'block', marginBottom: '0.8rem' }}>
                 {article.source} • {new Date(article.published_at).toLocaleString()}
               </small>
+
               {article.image_url && (
                 <img
                   src={article.image_url}
                   alt={article.title}
-                  style={{ maxWidth: '100%', marginTop: '0.5rem', borderRadius: '4px' }}
+                  style={{
+                    maxWidth: '100%',
+                    marginTop: '0.8rem',
+                    borderRadius: '8px',
+                    display: 'block',
+                  }}
                   onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
                 />
               )}
 
-              {likelyChinese && (
-                <button
-                  onClick={() => translateArticle(article, cardId)}
-                  style={{
-                    marginTop: '1rem',
-                    padding: '0.4rem 0.8rem',
-                    backgroundColor: '#ff9800',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontSize: '0.9rem',
-                  }}
-                >
-                  Translate to English
-                </button>
-              )}
+              <button
+                onClick={() => translateArticle(article)}
+                style={{
+                  marginTop: '1rem',
+                  padding: '0.7rem 1.4rem',
+                  backgroundColor: '#ff9800',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  width: '100%',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                }}
+              >
+                Translate to English
+              </button>
             </div>
           );
         })}
       </div>
 
       {internationalArticles.length === 0 && (
-        <p style={{ textAlign: 'center', color: '#666' }}>No headlines available right now.</p>
+        <p style={{ textAlign: 'center', color: '#666', marginTop: '3rem', fontSize: '1.1rem' }}>
+          No headlines available right now.
+        </p>
       )}
+
       <p
         style={{
           fontSize: '0.9rem',
-          color: '#666',
+          color: '#777',
           textAlign: 'center',
-          marginTop: '1rem',
+          marginTop: '3rem',
+          paddingBottom: '2rem',
         }}
       >
-        Auto-hides Chinese articles • Click "Translate" for any remaining non-English.
+        Auto-hides Chinese articles • Click "Translate" for any language to English
       </p>
-
-      {/* Hidden div for global Google Translate init */}
-      <div id="google_translate_element_global" style={{ display: 'none' }}></div>
     </div>
   );
 };

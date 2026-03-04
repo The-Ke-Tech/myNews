@@ -1,28 +1,21 @@
+// src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import News from './components/News'; // World/International
-import KenyanNews from './components/KenyanNews'; // New Kenyan page
-import About from './pages/About';
-
-function Home() {
-  return (
-    <div style={{ textAlign: 'center', padding: '2rem', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
-      <h1 style={{ color: '#007bff' }}>Welcome to Your News App</h1>
-      <p>Choose a section from the menu above.</p>
-    </div>
-  );
-}
+import Home from './components/Home';        // your Home component
+import News from './components/News';        // World
+import KenyanNews from './components/KenyanNews'; // Kenya
+import About from './components/About';      // ← Add or update this line
 
 function App() {
   return (
     <Router>
       <nav style={{
         padding: '1rem',
-        backgroundColor: '#007bff', // Blue for vibrancy
+        backgroundColor: '#007bff',
         color: 'white',
         display: 'flex',
         justifyContent: 'space-around',
-        flexWrap: 'wrap', // Responsive for mobile
+        flexWrap: 'wrap',
         gap: '1rem',
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
       }}>
@@ -32,13 +25,13 @@ function App() {
         <Link to="/about" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>About</Link>
       </nav>
 
-      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}> {/* Centered content */}
+      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
         <Routes>
-  <Route path="/" element={<Home />} />
-  <Route path="/world" element={<News />} />
-  <Route path="/kenya" element={<KenyanNews />} />
-  <Route path="/about" element={<About />} />
-</Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/world" element={<News />} />
+          <Route path="/kenya" element={<KenyanNews />} />
+          <Route path="/about" element={<About />} />      {/* ← This line makes /about show */}
+        </Routes>
       </div>
     </Router>
   );

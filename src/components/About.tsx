@@ -1,4 +1,4 @@
-// src/pages/About.tsx
+// src/components/About.tsx
 import React from 'react';
 
 const About: React.FC = () => {
@@ -41,12 +41,12 @@ const About: React.FC = () => {
       <section className="about-section contact">
         <h2>Contact / Feedback</h2>
         <p>
-          Built with Ben in Kaimosi universiity, Kenya<br />
+          Built with ❤️ at Kaimosi University, Kenya<br />
           Got suggestions or found a bug? Feel free to reach out!
         </p>
         <p>
           <strong>Email:</strong> benokoth707@gmail.com<br />
-          <strong>X/Twitter:</strong>news
+          <strong>X/Twitter:</strong> @yourhandle (or link it)
         </p>
       </section>
 
