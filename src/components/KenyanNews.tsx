@@ -18,8 +18,6 @@ const KenyanNews: React.FC = () => {
 
   const apiKey = process.env.REACT_APP_NEWS_DATA_KEY;
 
-  
-
   const fetchNews = async (forceRefresh = false) => {
     if (!apiKey) {
       setError('NewsData API key missing in .env');
@@ -35,7 +33,6 @@ const KenyanNews: React.FC = () => {
     setError(null);
 
     try {
-      // size=10 (maximum on free plan)
       const url = `https://newsdata.io/api/1/news?apikey=${apiKey}&country=ke&language=en&size=10`;
 
       const response = await fetch(url);
@@ -86,17 +83,10 @@ const KenyanNews: React.FC = () => {
 
   const handleRefresh = () => fetchNews(true);
 
-  // Translation: Open Google Translate in new tab with pre-filled text → Kiswahili
   const translateArticle = (article: Article) => {
     const text = `${article.title}\n\n${article.description || 'No description available.'}`;
-    
-    // Encode text for URL
     const encodedText = encodeURIComponent(text);
-    
-    // Google Translate URL for English → Kiswahili (sw)
     const translateUrl = `https://translate.google.com/?sl=auto&tl=sw&text=${encodedText}&op=translate`;
-    
-    // Open in new tab
     window.open(translateUrl, '_blank', 'noopener,noreferrer');
   };
 
@@ -185,7 +175,6 @@ const KenyanNews: React.FC = () => {
                 />
               )}
 
-              {/* Translation button on EVERY card – opens Google Translate to Kiswahili */}
               <button
                 onClick={() => translateArticle(article)}
                 style={{
@@ -225,8 +214,6 @@ const KenyanNews: React.FC = () => {
       >
         Powered by NewsData.io • Up to 10 recent headlines (free tier limit)
       </p>
-
-      {/* No need for hidden div anymore */}
     </div>
   );
 };
